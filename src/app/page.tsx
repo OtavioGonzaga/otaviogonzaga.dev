@@ -4,8 +4,7 @@ import { projects } from "@/modules/projects/content/projects";
 import { personStructuredData, websiteStructuredData } from "@/shared/seo/structured-data";
 import { dictionaries } from "@/shared/i18n/dictionaries";
 import { getLocale } from "@/shared/i18n/get-locale";
-import { LanguageSelector } from "@/shared/ui/language-selector";
-import { ThemeSelector } from "@/shared/ui/theme-selector";
+import { PreferencesMenu } from "@/shared/ui/preferences-menu";
 
 export default async function Home() {
   const locale = await getLocale();
@@ -27,11 +26,7 @@ export default async function Home() {
           <a href={profile.linkedinUrl} rel="noreferrer" target="_blank">
             linkedin ↗
           </a>
-          <ThemeSelector
-            label={copy.theme}
-            options={{ system: copy.system, light: copy.light, dark: copy.dark }}
-          />
-          <LanguageSelector label={copy.language} locale={locale} />
+          <PreferencesMenu locale={locale} labels={copy} />
         </nav>
       </header>
       <main className="shell main-content" id="main-content">
@@ -142,6 +137,10 @@ export default async function Home() {
           </div>
         </section>
       </main>
+      <footer className="site-footer shell">
+        <span>© 2026 Otavio Gonzaga</span>
+        <span>GitHub &nbsp;·&nbsp; LinkedIn &nbsp;·&nbsp; RSS later</span>
+      </footer>
       <script
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(websiteStructuredData()).replace(/</g, "\\u003c"),

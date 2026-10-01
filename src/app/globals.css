@@ -253,6 +253,7 @@ small {
   font-size: 0.875rem;
 }
 .project-grid {
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 528px));
   justify-content: space-between;
 }
@@ -334,6 +335,65 @@ small {
   display: flex;
   gap: 1.25rem;
 }
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-block: 32px 40px;
+  color: var(--foreground-muted);
+  font:
+    12px "IBM Plex Mono",
+    monospace;
+}
+.preference-trigger {
+  border: 0;
+  background: transparent;
+  color: var(--gb-yellow);
+  font: inherit;
+  cursor: pointer;
+}
+.tui-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background: #0009;
+}
+.tui-modal {
+  width: min(26rem, calc(100% - 2rem));
+  border: 1px solid var(--accent);
+  background: var(--background);
+  box-shadow: 8px 8px 0 var(--border);
+  padding: 1rem;
+  color: var(--foreground);
+  font:
+    13px "IBM Plex Mono",
+    monospace;
+}
+.tui-title {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.7rem;
+  color: var(--accent);
+}
+.tui-title button,
+.tui-options button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.tui-options {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.tui-options .selected {
+  color: var(--accent);
+}
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
@@ -358,6 +418,10 @@ small {
   }
   .navigation .control {
     display: none;
+  }
+  .site-footer {
+    flex-direction: column;
+    gap: 1rem;
   }
   .hero {
     padding-block: 4rem;
