@@ -1,25 +1,20 @@
 import { cache } from "react";
-
-type GitHubRepository = { name: string; stargazers_count: number; html_url: string };
+import { GitHubApiRepository } from "@/modules/github/adapters/github-api-repository";
+import type { GitHubRepositoryPort } from "@/modules/github/ports/github-repository";
 
 export type GitHubSummary = { repositoryCount: number; stars: number };
 
-const githubApiUrl = "https://api.github.com/users/OtavioGonzaga/repos?per_page=100";
+const githubRepository = new GitHubApiRepository();
 
-export const getGitHubSummary = cache(async (): Promise<GitHubSummary | null> => {
-  try {
-    const response = await fetch(githubApiUrl, {
-      headers: { Accept: "application/vnd.github+json" },
-      next: { revalidate: 21_600 },
-    });
-    if (!response.ok) return null;
+export async function getGitHubSummaryFrom(
+  repository: GitHubRepositoryPort,
+): Promise<GitHubSummary | null> {
+  const repositories = await repository.listPublicRepositories();
+  if (!repositories) return null;
+  return {
+    repositoryCount: repositories.length,
+    stars: repositories.reduce((total, repository) => total + repository.stargazersCount, 0),
+  };
+}
 
-    const repositories = (await response.json()) as GitHubRepository[];
-    return {
-      repositoryCount: repositories.length,
-      stars: repositories.reduce((total, repository) => total + repository.stargazers_count, 0),
-    };
-  } catch {
-    return null;
-  }
-});
+export const getGitHubSummary = cache(() => getGitHubSummaryFrom(githubRepository));

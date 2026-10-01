@@ -15,6 +15,6 @@ while [ "$attempt" -lt 30 ]; do
   sleep 1
 done
 [ "$attempt" -lt 30 ] || { podman logs "$container"; exit 1; }
-for path in /healthz / /robots.txt /sitemap.xml; do
+for path in /healthz / /projects/kmux /robots.txt /sitemap.xml; do
   curl --fail --silent "http://127.0.0.1:$port$path" >/dev/null
 done

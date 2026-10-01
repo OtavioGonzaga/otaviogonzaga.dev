@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Dedicated project routes, project smoke coverage, and content-backed practice areas.
+- GitHub module Ports & Adapters with unit tests and broader module coverage.
 - Project cards now keep spacing when the mobile layout switches to one column.
 - Footer external links now open in a separate tab; preference triggers and project-card spacing were refined.
 - Working footer links and an RSS feed at `/rss.xml`.

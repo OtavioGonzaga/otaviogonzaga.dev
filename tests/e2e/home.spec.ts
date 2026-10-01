@@ -22,6 +22,10 @@ test("serves the essential public endpoints", async ({ page, request }) => {
     "/rss.xml",
   );
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(2);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://otaviogonzaga.dev",
+  );
 
   for (const path of ["/healthz", "/robots.txt", "/sitemap.xml"]) {
     const response = await request.get(path);
@@ -32,6 +36,19 @@ test("serves the essential public endpoints", async ({ page, request }) => {
   expect(rss.ok()).toBeTruthy();
   expect(rss.headers()["content-type"]).toContain("application/rss+xml");
   await expect(rss.text()).resolves.toContain('<rss version="2.0">');
+});
+
+test("renders project pages with canonical project navigation", async ({ page }) => {
+  await page.goto("/projects/kmux");
+  await expect(page.getByRole("heading", { level: 1, name: "kmux" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Ver repositório/ })).toHaveAttribute(
+    "target",
+    "_blank",
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://otaviogonzaga.dev/projects/kmux",
+  );
 });
 
 test("persists language and theme preferences", async ({ page }) => {

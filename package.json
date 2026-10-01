@@ -13,6 +13,7 @@
     "format:check": "oxfmt . --check",
     "lint": "oxlint",
     "typecheck": "next typegen && tsc --noEmit",
+    "i18n:check": "vitest run tests/shared/i18n/dictionaries.test.ts",
     "docs:check": "bun scripts/check-docs.ts",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -20,7 +21,7 @@
     "test:e2e": "playwright test",
     "test:release": "vitest run scripts/release.test.ts",
     "test:smoke": "sh scripts/smoke-test-image.sh",
-    "ci:quality": "bun run format:check && bun run lint && bun run typecheck && bun run docs:check && bun run test:release && bun run build"
+    "ci:quality": "bun run format:check && bun run lint && bun run typecheck && bun run i18n:check && bun run docs:check && bun run test:release && bun run build"
   },
   "dependencies": {
     "next": "16.1.1",

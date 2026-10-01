@@ -273,6 +273,9 @@ small {
   font-size: 2rem;
   line-height: 1.25;
 }
+.project-title-link {
+  text-decoration: none;
+}
 .project-card p {
   color: var(--foreground-muted);
 }
@@ -289,6 +292,40 @@ small {
 }
 .project-card > a {
   margin-top: 0.75rem;
+}
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.practice-card {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+.practice-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.practice-card p {
+  color: var(--foreground-muted);
+}
+.project-page {
+  min-height: 70vh;
+  padding-block: 6rem;
+}
+.project-page h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(3rem, 6vw, 5rem);
+}
+.project-description {
+  max-width: 45rem;
+  color: var(--foreground-muted);
+  font-size: 1.25rem;
+}
+.back-link {
+  display: inline-block;
+  margin-bottom: 4rem;
+  color: var(--accent);
 }
 .split-section,
 .section-heading {
@@ -470,6 +507,9 @@ small {
     gap: 2rem;
   }
   .project-grid {
+    grid-template-columns: 1fr;
+  }
+  .practice-grid {
     grid-template-columns: 1fr;
   }
   .section-heading > a {

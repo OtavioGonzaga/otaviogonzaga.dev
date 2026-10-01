@@ -1,4 +1,5 @@
 import { getGitHubSummary } from "@/modules/github/application/get-github-summary";
+import { practiceAreas } from "@/modules/profile/content/areas";
 import { profile } from "@/modules/profile/content/profile";
 import { projects } from "@/modules/projects/content/projects";
 import { personStructuredData, websiteStructuredData } from "@/shared/seo/structured-data";
@@ -83,12 +84,28 @@ export default async function Home() {
                   <span>0{projects.indexOf(project) + 1}</span>
                   <span>{project.category[locale]}</span>
                 </div>
-                <h3>{project.name}</h3>
+                <h3>
+                  <a className="project-title-link" href={`/projects/${project.slug}`}>
+                    {project.name}
+                  </a>
+                </h3>
                 <p>{project.description[locale]}</p>
                 <p className="project-stack">{project.technologies.join("  ·  ")}</p>
                 <a href={project.repositoryUrl} rel="noreferrer" target="_blank">
                   {copy.projectRepository} <span aria-hidden="true">↗</span>
                 </a>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section aria-labelledby="areas-title" className="content-section" id="areas">
+          <p className="eyebrow">{copy.areasNumber}</p>
+          <h2 id="areas-title">{copy.areasTitle}</h2>
+          <div className="practice-grid">
+            {practiceAreas.map((area) => (
+              <article className="practice-card" key={area.title.en}>
+                <h3>{area.title[locale]}</h3>
+                <p>{area.description[locale]}</p>
               </article>
             ))}
           </div>
