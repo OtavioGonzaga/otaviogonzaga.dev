@@ -18,3 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Gruvbox light and dark themes with system, light, and dark preferences.
 - Portuguese and English presentation with a server-readable language cookie.
 - Initial Next.js, Bun, quality, OCI, release, and deployment foundation.
+
+### Changed
+
+- Generate Next.js declaration files before type checks instead of tracking generated `next-env.d.ts`.
