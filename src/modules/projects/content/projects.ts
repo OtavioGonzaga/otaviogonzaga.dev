@@ -3,38 +3,33 @@ export type Project = {
   name: string;
   repositoryUrl: string;
   technologies: readonly string[];
+  category: { "pt-BR": string; en: string };
   description: { "pt-BR": string; en: string };
 };
 
 export const projects: readonly Project[] = [
   {
-    slug: "rustbot",
-    name: "rustbot",
-    repositoryUrl: "https://github.com/OtavioGonzaga/rustbot",
-    technologies: ["Rust"],
+    slug: "kmux",
+    name: "kmux",
+    repositoryUrl: "https://github.com/OtavioGonzaga/kmux",
+    technologies: ["Rust", "Clap", "SSH"],
+    category: { "pt-BR": "CLI / FERRAMENTA DE SISTEMA", en: "CLI / SYSTEMS TOOL" },
     description: {
-      "pt-BR": "Um projeto público em Rust selecionado como evidência de prática de engenharia.",
-      en: "A public Rust project selected as evidence of engineering practice.",
+      "pt-BR":
+        "Seleção e gerenciamento de identidades SSH sem reescrever ~/.ssh ou sobrecarregar tentativas de autenticação.",
+      en: "SSH identity selection and management without rewriting ~/.ssh or overloading authentication attempts.",
     },
   },
   {
-    slug: "blog-api",
-    name: "blog-api",
-    repositoryUrl: "https://github.com/OtavioGonzaga/blog-api",
-    technologies: ["TypeScript"],
+    slug: "kmux-desktop",
+    name: "kmux desktop",
+    repositoryUrl: "https://github.com/OtavioGonzaga/kmux-desktop",
+    technologies: ["Tauri", "React", "TypeScript"],
+    category: { "pt-BR": "DESKTOP / COMPANHEIRO", en: "DESKTOP / COMPANION" },
     description: {
-      "pt-BR": "Uma API pública em TypeScript selecionada como evidência de prática de engenharia.",
-      en: "A public TypeScript API selected as evidence of engineering practice.",
-    },
-  },
-  {
-    slug: "concorrencia",
-    name: "concorrencia",
-    repositoryUrl: "https://github.com/OtavioGonzaga/concorrencia",
-    technologies: ["C++"],
-    description: {
-      "pt-BR": "Um projeto público em C++ selecionado como evidência de prática de engenharia.",
-      en: "A public C++ project selected as evidence of engineering practice.",
+      "pt-BR":
+        "Um gerenciador desktop em Tauri + React para identidades SSH do kmux, criado como complemento visual da CLI.",
+      en: "A Tauri + React desktop manager for kmux SSH identities, designed as a visual companion to the CLI.",
     },
   },
 ];
