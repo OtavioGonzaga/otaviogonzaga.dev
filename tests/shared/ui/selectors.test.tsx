@@ -16,7 +16,7 @@ describe("preference selectors", () => {
 
   it("opens an isolated language menu, persists its choice and refreshes the server view", () => {
     render(<PreferencesMenu labels={dictionaries["pt-BR"]} locale="pt-BR" preference="language" />);
-    fireEvent.click(screen.getByRole("button", { name: "Idioma" }));
+    fireEvent.click(screen.getByRole("button", { name: "idioma: português" }));
     const dialog = screen.getByRole("dialog", { name: "Idioma" });
     expect(dialog).toBeVisible();
     expect(dialog).not.toHaveTextContent("Tema");
@@ -27,7 +27,7 @@ describe("preference selectors", () => {
 
   it("persists and applies a selected color theme from its own menu", () => {
     render(<PreferencesMenu labels={dictionaries["pt-BR"]} locale="pt-BR" preference="theme" />);
-    fireEvent.click(screen.getByRole("button", { name: /Tema:/ }));
+    fireEvent.click(screen.getByRole("button", { name: /tema: sistema/ }));
     const dialog = screen.getByRole("dialog", { name: "Tema" });
     expect(dialog).toBeVisible();
     expect(dialog).not.toHaveTextContent("Idioma");

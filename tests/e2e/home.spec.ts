@@ -11,6 +11,12 @@ test("serves the essential public endpoints", async ({ page, request }) => {
   await expect(
     page.locator("footer").getByRole("link", { name: "LinkedIn", exact: true }),
   ).toHaveAttribute("href", "https://www.linkedin.com/in/otaviogonzaga");
+  await expect(
+    page.locator("footer").getByRole("link", { name: "GitHub", exact: true }),
+  ).toHaveAttribute("target", "_blank");
+  await expect(
+    page.locator("footer").getByRole("link", { name: "LinkedIn", exact: true }),
+  ).toHaveAttribute("target", "_blank");
   await expect(page.getByRole("link", { name: "RSS", exact: true })).toHaveAttribute(
     "href",
     "/rss.xml",
@@ -30,7 +36,7 @@ test("serves the essential public endpoints", async ({ page, request }) => {
 
 test("persists language and theme preferences", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Idioma" }).click();
+  await page.getByRole("button", { name: "idioma: português" }).click();
   await page.getByRole("button", { name: /English/ }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("heading", { level: 1, name: "Otavio Gonzaga" })).toBeVisible();
@@ -47,8 +53,8 @@ test("persists language and theme preferences", async ({ page }) => {
 test("keeps the header usable on narrow screens and exposes the skip link", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
-  await expect(page.getByRole("button", { name: /Tema:/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Idioma" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /tema: sistema/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "idioma: português" })).toBeVisible();
   expect(
     await page.locator("body").evaluate((element) => element.scrollWidth <= window.innerWidth),
   ).toBe(true);

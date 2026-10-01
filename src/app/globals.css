@@ -258,6 +258,8 @@ small {
   justify-content: space-between;
 }
 .project-card {
+  display: flex;
+  flex-direction: column;
   min-height: 274px;
   padding: 26px 28px;
   gap: 16px;
@@ -283,6 +285,9 @@ small {
 }
 .project-stack {
   margin: auto 0 0;
+}
+.project-card > a {
+  margin-top: 0.75rem;
 }
 .split-section,
 .section-heading {
@@ -383,7 +388,6 @@ small {
   padding-bottom: 0.7rem;
   color: var(--accent);
 }
-.tui-title button,
 .tui-options button {
   display: grid;
   grid-template-columns: 3ch 1fr;
@@ -396,6 +400,21 @@ small {
   background: none;
   color: inherit;
   font: inherit;
+  cursor: pointer;
+}
+.tui-title button {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  align-self: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font:
+    1.5rem/1 "IBM Plex Mono",
+    monospace;
   cursor: pointer;
 }
 .tui-options {

@@ -8,6 +8,10 @@ import type { Dictionary } from "@/shared/i18n/dictionaries";
 
 type ThemeMode = "system" | "light" | "dark";
 
+function lowerCase(value: string, locale: Locale) {
+  return value.toLocaleLowerCase(locale);
+}
+
 function applyTheme(mode: ThemeMode) {
   const dark =
     mode === "dark" || (mode === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
@@ -49,7 +53,9 @@ export function PreferencesMenu({
         onClick={() => setOpen(true)}
         type="button"
       >
-        {preference === "theme" ? `${labels.theme}: ${theme}` : labels.language}
+        {preference === "theme"
+          ? `${lowerCase(labels.theme, locale)}: ${lowerCase(labels[theme], locale)}`
+          : `${lowerCase(labels.language, locale)}: ${locale === "pt-BR" ? "português" : "english"}`}
       </button>
       {open && (
         <div

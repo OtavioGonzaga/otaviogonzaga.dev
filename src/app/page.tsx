@@ -44,10 +44,10 @@ export default async function Home() {
             NestJS&nbsp;&nbsp; PostgreSQL&nbsp;&nbsp; Docker&nbsp;&nbsp; Rust&nbsp;&nbsp; Linux
           </p>
           <div className="actions">
-            <a className="primary-action" href={profile.githubUrl}>
+            <a className="primary-action" href={profile.githubUrl} rel="noreferrer" target="_blank">
               GitHub ↗
             </a>
-            <a className="ghost-action" href={profile.linkedinUrl}>
+            <a className="ghost-action" href={profile.linkedinUrl} rel="noreferrer" target="_blank">
               LinkedIn ↗
             </a>
           </div>
@@ -72,7 +72,9 @@ export default async function Home() {
               <p className="eyebrow">{copy.workNumber}</p>
               <h2 id="projects-title">{copy.workTitle}</h2>
             </div>
-            <a href={profile.githubUrl}>github.com/OtavioGonzaga ↗</a>
+            <a href={profile.githubUrl} rel="noreferrer" target="_blank">
+              github.com/OtavioGonzaga ↗
+            </a>
           </div>
           <div className="project-grid">
             {projects.map((project) => (

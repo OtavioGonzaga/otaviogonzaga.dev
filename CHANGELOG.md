@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Footer external links now open in a separate tab; preference triggers and project-card spacing were refined.
 - Working footer links and an RSS feed at `/rss.xml`.
 - Portuguese and English translations for the complete landing-page copy, with independent TUI-style theme and language menus.
 - Figma-aligned portfolio layout with detailed hero, project, practice, GitHub, contact, and footer sections.
