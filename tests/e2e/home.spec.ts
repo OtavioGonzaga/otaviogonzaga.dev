@@ -8,9 +8,12 @@ test("serves the essential public endpoints", async ({ page, request }) => {
   await expect(
     page.getByRole("heading", { name: /Projetos e experimentos de software/ }),
   ).toBeVisible();
-  await expect(page.getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute(
+  await expect(
+    page.locator("footer").getByRole("link", { name: "LinkedIn", exact: true }),
+  ).toHaveAttribute("href", "https://www.linkedin.com/in/otaviogonzaga");
+  await expect(page.getByRole("link", { name: "RSS", exact: true })).toHaveAttribute(
     "href",
-    "https://www.linkedin.com/in/otaviogonzaga",
+    "/rss.xml",
   );
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(2);
 
@@ -18,6 +21,11 @@ test("serves the essential public endpoints", async ({ page, request }) => {
     const response = await request.get(path);
     expect(response.ok()).toBeTruthy();
   }
+
+  const rss = await request.get("/rss.xml");
+  expect(rss.ok()).toBeTruthy();
+  expect(rss.headers()["content-type"]).toContain("application/rss+xml");
+  await expect(rss.text()).resolves.toContain('<rss version="2.0">');
 });
 
 test("persists language and theme preferences", async ({ page }) => {

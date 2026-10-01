@@ -126,7 +126,17 @@ export default async function Home() {
       </main>
       <footer className="site-footer shell">
         <span>© 2026 Otavio Gonzaga</span>
-        <span>{copy.footerLinks}</span>
+        <nav aria-label={copy.contact} className="footer-links">
+          <a href={profile.githubUrl} rel="noreferrer" target="_blank">
+            GitHub
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href={profile.linkedinUrl} rel="noreferrer" target="_blank">
+            LinkedIn
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href="/rss.xml">{copy.rss}</a>
+        </nav>
       </footer>
       <script
         dangerouslySetInnerHTML={{

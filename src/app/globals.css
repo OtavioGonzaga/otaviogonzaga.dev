@@ -345,6 +345,11 @@ small {
     12px "IBM Plex Mono",
     monospace;
 }
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 .preference-trigger {
   border: 0;
   background: transparent;
@@ -432,6 +437,9 @@ small {
   .site-footer {
     flex-direction: column;
     gap: 1rem;
+  }
+  .footer-links {
+    flex-wrap: wrap;
   }
   .hero {
     padding-block: 4rem;

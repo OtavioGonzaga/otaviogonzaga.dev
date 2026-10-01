@@ -46,7 +46,7 @@ export const dictionaries = {
     contactTitle: "Trabalho, colaboração ou conversa sobre código aberto.",
     contactDescription:
       "O GitHub é o melhor lugar para inspecionar o trabalho. O LinkedIn está disponível quando uma conversa fizer mais sentido do que uma issue ou pull request.",
-    footerLinks: "GitHub · LinkedIn · RSS em breve",
+    rss: "RSS",
   },
   en: {
     language: "Language",
@@ -95,7 +95,7 @@ export const dictionaries = {
     contactTitle: "Work, collaboration or open-source discussion.",
     contactDescription:
       "GitHub is the best place to inspect the work. LinkedIn is there when a conversation makes more sense than an issue or pull request.",
-    footerLinks: "GitHub · LinkedIn · RSS later",
+    rss: "RSS",
   },
 } as const;
 
