@@ -18,29 +18,27 @@ export default async function Home() {
           ~/otavio
         </a>
         <nav aria-label={copy.home} className="navigation">
-          <a href="#projects">work</a>
-          <a href="#about">about</a>
+          <a href="#projects">{copy.work}</a>
+          <a href="#about">{copy.aboutNav}</a>
           <a href={profile.githubUrl} rel="noreferrer" target="_blank">
-            github ↗
+            {copy.githubNav} ↗
           </a>
           <a href={profile.linkedinUrl} rel="noreferrer" target="_blank">
-            linkedin ↗
+            {copy.linkedinNav} ↗
           </a>
-          <PreferencesMenu locale={locale} labels={copy} />
+          <PreferencesMenu locale={locale} labels={copy} preference="theme" />
+          <PreferencesMenu locale={locale} labels={copy} preference="language" />
         </nav>
       </header>
       <main className="shell main-content" id="main-content">
         <section aria-labelledby="intro-title" className="hero">
-          <p className="eyebrow">SOFTWARE ENGINEERING / ARCHITECTURE / SYSTEMS</p>
+          <p className="eyebrow">{copy.engineeringAreas}</p>
           <h1 id="intro-title">Otavio Gonzaga</h1>
           <p className="role">{copy.role}</p>
-          <p className="hero-description">
-            I design and build software systems with a focus on clear models, maintainable
-            architecture and reliable delivery.
-          </p>
+          <p className="hero-description">{copy.heroDescription}</p>
           <p className="status">
             <span />
-            Brazil / UTC−3 &nbsp;·&nbsp; designing, building and evolving software
+            {copy.status}
           </p>
           <p className="stack">
             NestJS&nbsp;&nbsp; PostgreSQL&nbsp;&nbsp; Docker&nbsp;&nbsp; Rust&nbsp;&nbsp; Linux
@@ -57,21 +55,13 @@ export default async function Home() {
         <section aria-labelledby="about-title" className="content-section" id="about">
           <div className="split-section">
             <div>
-              <p className="eyebrow">01 / ABOUT</p>
-              <h2 id="about-title">Engineering software from the domain outward.</h2>
+              <p className="eyebrow">{copy.aboutNumber}</p>
+              <h2 id="about-title">{copy.aboutTitle}</h2>
             </div>
             <div className="about-copy">
-              <p>
-                My work spans the software lifecycle: understanding the domain, designing
-                applications and APIs, integrating systems, working with data and operating what
-                gets delivered.
-              </p>
-              <p>
-                I care about explicit boundaries and code that reflects the problem it solves —
-                using ideas such as Domain-Driven Design and Ports & Adapters when they improve
-                clarity rather than as ceremony.
-              </p>
-              <small>B.Sc. in Software Engineering &nbsp;·&nbsp; UTFPR</small>
+              <p>{copy.aboutFirst}</p>
+              <p>{copy.aboutSecond}</p>
+              <small>{copy.educationDetail}</small>
               <small>NESTJS / POSTGRESQL / CONTAINERS / CI/CD / RUST</small>
             </div>
           </div>
@@ -79,8 +69,8 @@ export default async function Home() {
         <section aria-labelledby="projects-title" className="content-section" id="projects">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">02 / SELECTED WORK</p>
-              <h2 id="projects-title">Selected software projects and experiments.</h2>
+              <p className="eyebrow">{copy.workNumber}</p>
+              <h2 id="projects-title">{copy.workTitle}</h2>
             </div>
             <a href={profile.githubUrl}>github.com/OtavioGonzaga ↗</a>
           </div>
@@ -102,8 +92,8 @@ export default async function Home() {
           </div>
         </section>
         <section aria-labelledby="github-title" className="content-section github-section">
-          <p className="eyebrow">04 / GITHUB</p>
-          <h2 id="github-title">Public code as supporting evidence of the work.</h2>
+          <p className="eyebrow">{copy.githubNumber}</p>
+          <h2 id="github-title">{copy.githubTitle}</h2>
           {github ? (
             <p className="github-stats">
               <strong>{github.repositoryCount}</strong> {copy.repositories}{" "}
@@ -121,12 +111,9 @@ export default async function Home() {
           className="content-section contact-section"
           id="contact"
         >
-          <p className="eyebrow">05 / CONTACT</p>
-          <h2 id="contact-title">Work, collaboration or open-source discussion.</h2>
-          <p>
-            GitHub is the best place to inspect the work. LinkedIn is there when a conversation
-            makes more sense than an issue or pull request.
-          </p>
+          <p className="eyebrow">{copy.contactNumber}</p>
+          <h2 id="contact-title">{copy.contactTitle}</h2>
+          <p>{copy.contactDescription}</p>
           <div className="social-links">
             <a href={profile.githubUrl} rel="noreferrer" target="_blank">
               GitHub <span aria-hidden="true">↗</span>
@@ -139,7 +126,7 @@ export default async function Home() {
       </main>
       <footer className="site-footer shell">
         <span>© 2026 Otavio Gonzaga</span>
-        <span>GitHub &nbsp;·&nbsp; LinkedIn &nbsp;·&nbsp; RSS later</span>
+        <span>{copy.footerLinks}</span>
       </footer>
       <script
         dangerouslySetInnerHTML={{

@@ -21,6 +21,32 @@ export const dictionaries = {
     stars: "estrelas",
     githubUnavailable: "A atividade no GitHub não está disponível agora.",
     contact: "Contato",
+    work: "trabalhos",
+    aboutNav: "sobre",
+    githubNav: "github",
+    linkedinNav: "linkedin",
+    preferences: "preferências",
+    close: "Fechar",
+    engineeringAreas: "ENGENHARIA DE SOFTWARE / ARQUITETURA / SISTEMAS",
+    heroDescription:
+      "Projeto e construo sistemas de software com foco em modelos claros, arquitetura sustentável e entregas confiáveis.",
+    status: "Brasil / UTC−3 · projetando, construindo e evoluindo software",
+    aboutNumber: "01 / SOBRE",
+    aboutTitle: "Engenharia de software a partir do domínio.",
+    aboutFirst:
+      "Meu trabalho cobre o ciclo de vida do software: compreender o domínio, projetar aplicações e APIs, integrar sistemas, trabalhar com dados e operar o que é entregue.",
+    aboutSecond:
+      "Valorizo limites explícitos e código que reflita o problema que resolve — usando ideias como Domain-Driven Design e Ports & Adapters quando melhoram a clareza, em vez de como cerimônia.",
+    educationDetail: "Bacharelado em Engenharia de Software · UTFPR",
+    workNumber: "02 / TRABALHOS SELECIONADOS",
+    workTitle: "Projetos e experimentos de software selecionados.",
+    githubNumber: "04 / GITHUB",
+    githubTitle: "Código público como evidência complementar do trabalho.",
+    contactNumber: "05 / CONTATO",
+    contactTitle: "Trabalho, colaboração ou conversa sobre código aberto.",
+    contactDescription:
+      "O GitHub é o melhor lugar para inspecionar o trabalho. O LinkedIn está disponível quando uma conversa fizer mais sentido do que uma issue ou pull request.",
+    footerLinks: "GitHub · LinkedIn · RSS em breve",
   },
   en: {
     language: "Language",
@@ -44,6 +70,32 @@ export const dictionaries = {
     stars: "stars",
     githubUnavailable: "GitHub activity is unavailable right now.",
     contact: "Contact",
+    work: "work",
+    aboutNav: "about",
+    githubNav: "github",
+    linkedinNav: "linkedin",
+    preferences: "preferences",
+    close: "Close",
+    engineeringAreas: "SOFTWARE ENGINEERING / ARCHITECTURE / SYSTEMS",
+    heroDescription:
+      "I design and build software systems with a focus on clear models, maintainable architecture and reliable delivery.",
+    status: "Brazil / UTC−3 · designing, building and evolving software",
+    aboutNumber: "01 / ABOUT",
+    aboutTitle: "Engineering software from the domain outward.",
+    aboutFirst:
+      "My work spans the software lifecycle: understanding the domain, designing applications and APIs, integrating systems, working with data and operating what gets delivered.",
+    aboutSecond:
+      "I care about explicit boundaries and code that reflects the problem it solves — using ideas such as Domain-Driven Design and Ports & Adapters when they improve clarity rather than as ceremony.",
+    educationDetail: "B.Sc. in Software Engineering · UTFPR",
+    workNumber: "02 / SELECTED WORK",
+    workTitle: "Selected software projects and experiments.",
+    githubNumber: "04 / GITHUB",
+    githubTitle: "Public code as supporting evidence of the work.",
+    contactNumber: "05 / CONTACT",
+    contactTitle: "Work, collaboration or open-source discussion.",
+    contactDescription:
+      "GitHub is the best place to inspect the work. LinkedIn is there when a conversation makes more sense than an issue or pull request.",
+    footerLinks: "GitHub · LinkedIn · RSS later",
   },
 } as const;
 

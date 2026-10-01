@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import type { Locale } from "@/shared/i18n/dictionaries";
+import type { Dictionary } from "@/shared/i18n/dictionaries";
 
 type ThemeMode = "system" | "light" | "dark";
 
@@ -17,9 +18,11 @@ function applyTheme(mode: ThemeMode) {
 export function PreferencesMenu({
   locale,
   labels,
+  preference,
 }: {
   locale: Locale;
-  labels: Record<string, string>;
+  labels: Dictionary;
+  preference: "theme" | "language";
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -46,47 +49,64 @@ export function PreferencesMenu({
         onClick={() => setOpen(true)}
         type="button"
       >
-        theme: {theme}
+        {preference === "theme" ? `${labels.theme}: ${theme}` : labels.language}
       </button>
       {open && (
-        <div aria-label={labels.theme} className="tui-backdrop" role="dialog" aria-modal="true">
+        <div
+          aria-label={labels[preference]}
+          aria-modal="true"
+          className="tui-backdrop"
+          role="dialog"
+        >
           <div className="tui-modal">
             <div className="tui-title">
-              <span>preferences</span>
-              <button aria-label="Close" onClick={() => setOpen(false)} type="button">
+              <span>{labels.preferences}</span>
+              <button aria-label={labels.close} onClick={() => setOpen(false)} type="button">
                 ×
               </button>
             </div>
-            <p>{labels.theme}</p>
-            <div className="tui-options">
-              {(["system", "light", "dark"] as const).map((mode) => (
-                <button
-                  className={theme === mode ? "selected" : ""}
-                  key={mode}
-                  onClick={() => setThemeMode(mode)}
-                  type="button"
-                >
-                  [{theme === mode ? "x" : " "}] {labels[mode]}
-                </button>
-              ))}
-            </div>
-            <p>{labels.language}</p>
-            <div className="tui-options">
-              <button
-                className={locale === "pt-BR" ? "selected" : ""}
-                onClick={() => setLocale("pt-BR")}
-                type="button"
-              >
-                [{locale === "pt-BR" ? "x" : " "}] Português
-              </button>
-              <button
-                className={locale === "en" ? "selected" : ""}
-                onClick={() => setLocale("en")}
-                type="button"
-              >
-                [{locale === "en" ? "x" : " "}] English
-              </button>
-            </div>
+            {preference === "theme" ? (
+              <>
+                <p>{labels.theme}</p>
+                <div className="tui-options">
+                  {(["system", "light", "dark"] as const).map((mode) => (
+                    <button
+                      aria-pressed={theme === mode}
+                      className={theme === mode ? "selected" : ""}
+                      key={mode}
+                      onClick={() => setThemeMode(mode)}
+                      type="button"
+                    >
+                      <span aria-hidden="true">[{theme === mode ? "x" : " "}]</span>
+                      <span>{labels[mode]}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <p>{labels.language}</p>
+                <div className="tui-options">
+                  {(
+                    [
+                      ["pt-BR", "Português"],
+                      ["en", "English"],
+                    ] as const
+                  ).map(([nextLocale, name]) => (
+                    <button
+                      aria-pressed={locale === nextLocale}
+                      className={locale === nextLocale ? "selected" : ""}
+                      key={nextLocale}
+                      onClick={() => setLocale(nextLocale)}
+                      type="button"
+                    >
+                      <span aria-hidden="true">[{locale === nextLocale ? "x" : " "}]</span>
+                      <span>{name}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

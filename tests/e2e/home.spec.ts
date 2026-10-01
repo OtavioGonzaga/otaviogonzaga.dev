@@ -5,7 +5,9 @@ test("serves the essential public endpoints", async ({ page, request }) => {
   await expect(page.getByRole("heading", { level: 1, name: /Otavio Gonzaga/ })).toBeVisible();
   await expect(page).toHaveTitle(/Otavio Gonzaga/);
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
-  await expect(page.getByRole("heading", { name: /Selected software projects/ })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Projetos e experimentos de software/ }),
+  ).toBeVisible();
   await expect(page.getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute(
     "href",
     "https://www.linkedin.com/in/otaviogonzaga",
@@ -20,10 +22,11 @@ test("serves the essential public endpoints", async ({ page, request }) => {
 
 test("persists language and theme preferences", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /theme:/ }).click();
+  await page.getByRole("button", { name: "Idioma" }).click();
   await page.getByRole("button", { name: /English/ }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("heading", { level: 1, name: "Otavio Gonzaga" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Selected software projects/ })).toBeVisible();
 
   await page.getByRole("button", { name: /theme:/ }).click();
   await page.getByRole("button", { name: /Dark/ }).click();
@@ -36,7 +39,8 @@ test("persists language and theme preferences", async ({ page }) => {
 test("keeps the header usable on narrow screens and exposes the skip link", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
-  await expect(page.getByRole("button", { name: /theme:/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Tema:/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Idioma" })).toBeVisible();
   expect(
     await page.locator("body").evaluate((element) => element.scrollWidth <= window.innerWidth),
   ).toBe(true);
