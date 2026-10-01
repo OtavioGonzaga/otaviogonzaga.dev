@@ -55,6 +55,10 @@ test("keeps the header usable on narrow screens and exposes the skip link", asyn
   await page.goto("/");
   await expect(page.getByRole("button", { name: /tema: sistema/ })).toBeVisible();
   await expect(page.getByRole("button", { name: "idioma: português" })).toBeVisible();
+  const cards = page.locator(".project-card");
+  const firstCard = await cards.nth(0).boundingBox();
+  const secondCard = await cards.nth(1).boundingBox();
+  expect(secondCard?.y).toBeGreaterThan((firstCard?.y ?? 0) + (firstCard?.height ?? 0));
   expect(
     await page.locator("body").evaluate((element) => element.scrollWidth <= window.innerWidth),
   ).toBe(true);

@@ -256,6 +256,7 @@ small {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 528px));
   justify-content: space-between;
+  gap: 1rem;
 }
 .project-card {
   display: flex;
