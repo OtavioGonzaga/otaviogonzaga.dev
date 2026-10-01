@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("serves the essential public endpoints", async ({ page, request }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Otavio Gonzaga" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /Otavio Gonzaga/ })).toBeVisible();
   await expect(page).toHaveTitle(/Otavio Gonzaga/);
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expect(page.getByRole("heading", { name: "Projetos" })).toBeVisible();
