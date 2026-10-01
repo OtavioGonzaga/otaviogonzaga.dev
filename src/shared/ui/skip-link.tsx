@@ -1,7 +1,7 @@
-export function SkipLink() {
+export function SkipLink({ label }: { label: string }) {
   return (
     <a className="skip-link" href="#main-content">
-      Skip to main content
+      {label}
     </a>
   );
 }
