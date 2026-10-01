@@ -5,6 +5,12 @@ test("serves the essential public endpoints", async ({ page, request }) => {
   await expect(page.getByRole("heading", { name: "Otavio Gonzaga" })).toBeVisible();
   await expect(page).toHaveTitle(/Otavio Gonzaga/);
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
+  await expect(page.getByRole("heading", { name: "Projetos" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /LinkedIn/ })).toHaveAttribute(
+    "href",
+    "https://www.linkedin.com/in/otaviogonzaga",
+  );
+  await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(2);
 
   for (const path of ["/healthz", "/robots.txt", "/sitemap.xml"]) {
     const response = await request.get(path);
