@@ -1,0 +1,62 @@
+name: Deploy Image
+
+on:
+  workflow_call:
+    inputs:
+      environment: { required: true, type: string }
+      image_digest: { required: true, type: string }
+
+permissions:
+  contents: read
+  packages: read
+concurrency:
+  group: deploy-${{ github.repository }}-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: ./.github/actions/setup-podman
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with: { cosign-release: v3.1.3 }
+      - id: image
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+      - run: |
+          case '${{ inputs.image_digest }}' in sha256:????????????????????????????????????????????????????????????????) ;; *) exit 64;; esac
+          printf '%s' '${{ github.token }}' | podman login ghcr.io --username '${{ github.actor }}' --password-stdin
+          podman pull "${{ steps.image.outputs.name }}@${{ inputs.image_digest }}"
+          cosign verify --certificate-identity "https://github.com/${GITHUB_REPOSITORY}/.github/workflows/build-image.yml@refs/heads/main" --certificate-oidc-issuer https://token.actions.githubusercontent.com "${{ steps.image.outputs.name }}@${{ inputs.image_digest }}"
+          cosign verify-attestation --type spdxjson --certificate-identity "https://github.com/${GITHUB_REPOSITORY}/.github/workflows/build-image.yml@refs/heads/main" --certificate-oidc-issuer https://token.actions.githubusercontent.com "${{ steps.image.outputs.name }}@${{ inputs.image_digest }}" >/dev/null
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/deploy_key"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts"
+      - name: Transfer and deploy immutable image
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || 22 }}
+          PORT: ${{ vars.PORT }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+        run: |
+          set -euo pipefail
+          image="${{ steps.image.outputs.name }}@${{ inputs.image_digest }}"
+          target="$DEPLOY_USER@$DEPLOY_HOST"
+          app_name=$(printf '%s' "${GITHUB_REPOSITORY##*/}" | tr '[:upper:]' '[:lower:]')
+          image_ref="$app_name-${{ inputs.environment }}:${{ inputs.image_digest }}"
+          podman tag "$image" "$image_ref"
+          podman save --format oci-archive "$image_ref" | gzip -1 | ssh -i "$HOME/.ssh/deploy_key" -p "$DEPLOY_PORT" -o BatchMode=yes "$target" 'gzip -d | podman load'
+          bundle=$(mktemp -d)
+          trap 'rm -rf "$bundle"' EXIT
+          PORT="$PORT" NEXT_PUBLIC_SITE_URL="$NEXT_PUBLIC_SITE_URL" sh scripts/create-runtime-env.sh "$bundle/runtime.env"
+          cp scripts/deploy-podman.sh "$bundle/"
+          tar -C "$bundle" -cf - runtime.env deploy-podman.sh | gzip -1 | ssh -i "$HOME/.ssh/deploy_key" -p "$DEPLOY_PORT" -o BatchMode=yes "$target" "remote=\$(mktemp -d); gzip -d | tar -xf - -C \$remote; chmod 700 \$remote/deploy-podman.sh; sh \$remote/deploy-podman.sh '${{ inputs.environment }}' '$app_name' '$image_ref' \$remote/runtime.env"
+          curl --fail --retry 5 --retry-delay 2 "$NEXT_PUBLIC_SITE_URL/healthz" >/dev/null
+          curl --fail --retry 5 --retry-delay 2 "$NEXT_PUBLIC_SITE_URL/" >/dev/null

@@ -1,0 +1,51 @@
+{
+  "name": "otaviogonzaga.dev",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal portfolio for Otavio Gonzaga.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "format": "oxfmt .",
+    "format:check": "oxfmt . --check",
+    "lint": "oxlint",
+    "typecheck": "tsc --noEmit",
+    "docs:check": "bun scripts/check-docs.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:release": "vitest run scripts/release.test.ts",
+    "test:smoke": "sh scripts/smoke-test-image.sh",
+    "ci:quality": "bun run format:check && bun run lint && bun run typecheck && bun run docs:check && bun run test:release && bun run build"
+  },
+  "dependencies": {
+    "next": "16.1.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.1",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.1.1",
+    "@vitest/coverage-v8": "4.0.16",
+    "jsdom": "27.1.0",
+    "oxfmt": "0.27.0",
+    "oxlint": "1.32.0",
+    "playwright": "1.58.1",
+    "tailwindcss": "4.1.17",
+    "typescript": "5.9.3",
+    "vitest": "4.0.16"
+  },
+  "engines": {
+    "bun": "1.4.2"
+  }
+}

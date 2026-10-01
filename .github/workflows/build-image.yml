@@ -1,0 +1,46 @@
+name: Build Image
+
+on:
+  workflow_call:
+    inputs:
+      ref: { required: true, type: string }
+      image_tag: { required: true, type: string }
+    outputs:
+      digest:
+        value: ${{ jobs.build.outputs.digest }}
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.publish.outputs.digest }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: ./.github/actions/setup-podman
+      - id: meta
+        run: |
+          echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - run: podman build --format oci --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" --label "org.opencontainers.image.revision=${{ steps.meta.outputs.sha }}" --tag "${{ steps.meta.outputs.image }}:${{ inputs.image_tag }}" .
+      - run: sh scripts/smoke-test-image.sh "${{ steps.meta.outputs.image }}:${{ inputs.image_tag }}"
+      - run: podman save --format docker-archive "${{ steps.meta.outputs.image }}:${{ inputs.image_tag }}" --output "$RUNNER_TEMP/image.tar"
+      - name: Scan CRITICAL vulnerabilities
+        run: podman run --rm -v "$RUNNER_TEMP:/workspace:ro" docker.io/aquasec/trivy@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969 image --input /workspace/image.tar --severity CRITICAL --ignore-unfixed --exit-code 1 --no-progress
+      - name: Generate SPDX SBOM
+        run: podman run --rm -v "$RUNNER_TEMP:/workspace" docker.io/anchore/syft@sha256:600896ff278677fb13b16dc35999452f4e79636fc098c9fee6ce3cffef9858e2 scan docker-archive:/workspace/image.tar --output spdx-json=/workspace/image.sbom.spdx.json
+      - run: printf '%s' '${{ github.token }}' | podman login ghcr.io --username '${{ github.actor }}' --password-stdin
+      - id: publish
+        run: |
+          podman push --digestfile "$RUNNER_TEMP/digest" "${{ steps.meta.outputs.image }}:${{ inputs.image_tag }}" "docker://${{ steps.meta.outputs.image }}:${{ inputs.image_tag }}"
+          echo "digest=$(cat "$RUNNER_TEMP/digest")" >> "$GITHUB_OUTPUT"
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with: { cosign-release: v3.1.3 }
+      - run: cosign sign --yes "${{ steps.meta.outputs.image }}@${{ steps.publish.outputs.digest }}"
+      - run: cosign attest --yes --type spdxjson --predicate "$RUNNER_TEMP/image.sbom.spdx.json" "${{ steps.meta.outputs.image }}@${{ steps.publish.outputs.digest }}"

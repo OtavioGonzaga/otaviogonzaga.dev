@@ -1,0 +1,40 @@
+name: Deploy Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        { description: Existing SemVer release without v prefix, required: true, type: string }
+      environment:
+        { description: GitHub Environment destination, required: true, type: environment }
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.resolve.outputs.digest }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - id: resolve
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          [ "$GITHUB_REF" = refs/heads/main ] || { echo 'deployment must start from main' >&2; exit 1; }
+          git fetch --tags
+          git show-ref --verify --quiet "refs/tags/v$VERSION" || { echo 'release tag not found' >&2; exit 1; }
+          image="ghcr.io/${GITHUB_REPOSITORY,,}:v$VERSION"
+          digest=$(docker buildx imagetools inspect "$image" --format '{{json .Manifest.Digest}}' | tr -d '"')
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+  deploy:
+    needs: resolve
+    uses: ./.github/workflows/deploy-image.yml
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      image_digest: ${{ needs.resolve.outputs.digest }}
