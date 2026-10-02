@@ -8,11 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Production fonts, project sitemap entries, semantic Tailwind tokens, and accessible native preference dialogs.
+- GitHub API request timeout and deployment rollback coverage.
 - Dedicated project routes, project smoke coverage, and content-backed practice areas.
 - GitHub module Ports & Adapters with unit tests and broader module coverage.
 - Project cards now keep spacing when the mobile layout switches to one column.
 - Footer external links now open in a separate tab; preference triggers and project-card spacing were refined.
-- Working footer links and an RSS feed at `/rss.xml`.
 - Portuguese and English translations for the complete landing-page copy, with independent TUI-style theme and language menus.
 - Figma-aligned portfolio layout with detailed hero, project, practice, GitHub, contact, and footer sections.
 - Portfolio sections for profile, selected projects, social links, and cached GitHub activity.
@@ -23,4 +24,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Release and OCI image workflows now resume safely after partial failures, and Dependabot follows Bun lockfiles.
 - Generate Next.js declaration files before type checks instead of tracking generated `next-env.d.ts`.
+
+### Removed
+
+- Empty RSS feed surface until a publishing domain exists.
