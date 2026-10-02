@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: npm
+  - package-ecosystem: bun
     directory: /
     schedule: { interval: weekly, day: monday, time: "04:00", timezone: America/Sao_Paulo }
     groups:
