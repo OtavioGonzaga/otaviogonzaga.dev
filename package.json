@@ -20,7 +20,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:release": "vitest run scripts/release.test.ts",
-    "test:smoke": "sh scripts/smoke-test-image.sh",
+    "test:smoke": "podman build --format oci --file Containerfile --tag otaviogonzaga-dev:smoke . && sh scripts/smoke-test-image.sh otaviogonzaga-dev:smoke",
     "ci:quality": "bun run format:check && bun run lint && bun run typecheck && bun run i18n:check && bun run docs:check && bun run test:release && bun run build"
   },
   "dependencies": {

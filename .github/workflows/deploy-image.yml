@@ -50,7 +50,9 @@ jobs:
           image="${{ steps.image.outputs.name }}@${{ inputs.image_digest }}"
           target="$DEPLOY_USER@$DEPLOY_HOST"
           app_name=$(printf '%s' "${GITHUB_REPOSITORY##*/}" | tr '[:upper:]' '[:lower:]')
-          image_ref="$app_name-${{ inputs.environment }}:${{ inputs.image_digest }}"
+          digest_value="${{ inputs.image_digest }}"
+          digest_value="${digest_value#sha256:}"
+          image_ref="$app_name-${{ inputs.environment }}-deploy:$digest_value"
           podman tag "$image" "$image_ref"
           podman save --format oci-archive "$image_ref" | gzip -1 | ssh -i "$HOME/.ssh/deploy_key" -p "$DEPLOY_PORT" -o BatchMode=yes "$target" 'gzip -d | podman load'
           bundle=$(mktemp -d)
