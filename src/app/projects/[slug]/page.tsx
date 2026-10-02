@@ -38,7 +38,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <h1>{project.name}</h1>
       <p className="project-description">{project.description[locale]}</p>
       <p className="project-stack">{project.technologies.join("  ·  ")}</p>
-      <a className="primary-action" href={project.repositoryUrl} rel="noreferrer" target="_blank">
+      <a
+        className="primary-action bg-accent font-mono"
+        href={project.repositoryUrl}
+        rel="noreferrer"
+        target="_blank"
+      >
         {copy.projectRepository} ↗
       </a>
     </main>

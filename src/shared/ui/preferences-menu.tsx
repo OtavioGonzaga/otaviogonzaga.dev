@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import type { Locale } from "@/shared/i18n/dictionaries";
@@ -31,14 +31,28 @@ export function PreferencesMenu({
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeMode>("system");
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const saved = localStorage.getItem("theme-mode");
     if (saved === "system" || saved === "light" || saved === "dark") setTheme(saved);
   }, []);
+  useEffect(() => {
+    if (!open) return;
+    const dialog = dialogRef.current;
+    dialog?.showModal?.();
+    closeButtonRef.current?.focus();
+    return () => dialog?.close?.();
+  }, [open]);
+  function close() {
+    setOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  }
   function setLocale(next: Locale) {
     document.cookie = `locale=${next}; Path=/; Max-Age=31536000; SameSite=Lax`;
     router.refresh();
-    setOpen(false);
+    close();
   }
   function setThemeMode(next: ThemeMode) {
     localStorage.setItem("theme-mode", next);
@@ -51,6 +65,7 @@ export function PreferencesMenu({
         aria-expanded={open}
         className="preference-trigger"
         onClick={() => setOpen(true)}
+        ref={triggerRef}
         type="button"
       >
         {preference === "theme"
@@ -58,63 +73,65 @@ export function PreferencesMenu({
           : `${lowerCase(labels.language, locale)}: ${locale === "pt-BR" ? "português" : "english"}`}
       </button>
       {open && (
-        <div
+        <dialog
           aria-label={labels[preference]}
-          aria-modal="true"
-          className="tui-backdrop"
-          role="dialog"
+          className="tui-modal border-accent bg-background text-foreground font-mono"
+          onCancel={(event) => {
+            event.preventDefault();
+            close();
+          }}
+          onClose={() => setOpen(false)}
+          ref={dialogRef}
         >
-          <div className="tui-modal">
-            <div className="tui-title">
-              <span>{labels.preferences}</span>
-              <button aria-label={labels.close} onClick={() => setOpen(false)} type="button">
-                ×
-              </button>
-            </div>
-            {preference === "theme" ? (
-              <>
-                <p>{labels.theme}</p>
-                <div className="tui-options">
-                  {(["system", "light", "dark"] as const).map((mode) => (
-                    <button
-                      aria-pressed={theme === mode}
-                      className={theme === mode ? "selected" : ""}
-                      key={mode}
-                      onClick={() => setThemeMode(mode)}
-                      type="button"
-                    >
-                      <span aria-hidden="true">[{theme === mode ? "x" : " "}]</span>
-                      <span>{labels[mode]}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <p>{labels.language}</p>
-                <div className="tui-options">
-                  {(
-                    [
-                      ["pt-BR", "Português"],
-                      ["en", "English"],
-                    ] as const
-                  ).map(([nextLocale, name]) => (
-                    <button
-                      aria-pressed={locale === nextLocale}
-                      className={locale === nextLocale ? "selected" : ""}
-                      key={nextLocale}
-                      onClick={() => setLocale(nextLocale)}
-                      type="button"
-                    >
-                      <span aria-hidden="true">[{locale === nextLocale ? "x" : " "}]</span>
-                      <span>{name}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
+          <div className="tui-title">
+            <span>{labels.preferences}</span>
+            <button aria-label={labels.close} onClick={close} ref={closeButtonRef} type="button">
+              ×
+            </button>
           </div>
-        </div>
+          {preference === "theme" ? (
+            <>
+              <p>{labels.theme}</p>
+              <div className="tui-options">
+                {(["system", "light", "dark"] as const).map((mode) => (
+                  <button
+                    aria-pressed={theme === mode}
+                    className={theme === mode ? "selected" : ""}
+                    key={mode}
+                    onClick={() => setThemeMode(mode)}
+                    type="button"
+                  >
+                    <span aria-hidden="true">[{theme === mode ? "x" : " "}]</span>
+                    <span>{labels[mode]}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <p>{labels.language}</p>
+              <div className="tui-options">
+                {(
+                  [
+                    ["pt-BR", "Português"],
+                    ["en", "English"],
+                  ] as const
+                ).map(([nextLocale, name]) => (
+                  <button
+                    aria-pressed={locale === nextLocale}
+                    className={locale === nextLocale ? "selected" : ""}
+                    key={nextLocale}
+                    onClick={() => setLocale(nextLocale)}
+                    type="button"
+                  >
+                    <span aria-hidden="true">[{locale === nextLocale ? "x" : " "}]</span>
+                    <span>{name}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </dialog>
       )}
     </>
   );

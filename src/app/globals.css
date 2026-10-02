@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-focus: var(--focus);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-ibm-plex-mono);
+}
+
 :root {
   color-scheme: light;
   --gb-dark-0: #282828;
@@ -66,7 +79,7 @@ body {
   min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: Inter, Arial, sans-serif;
+  font-family: var(--font-inter), Arial, sans-serif;
   line-height: 1.5;
   transition:
     background-color 160ms ease,
@@ -106,7 +119,7 @@ a {
   margin-left: auto;
   color: var(--foreground-muted);
   align-items: center;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), monospace;
   font-size: 0.75rem;
 }
 .navigation a {
@@ -117,7 +130,7 @@ a {
 }
 .wordmark {
   color: var(--accent);
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), monospace;
   font-size: 0.8125rem;
   text-decoration: none;
 }
@@ -152,7 +165,7 @@ a {
 .eyebrow {
   margin: 0 0 0.75rem;
   color: var(--gb-yellow);
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), monospace;
   font-size: 0.8125rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -188,7 +201,7 @@ a {
 .project-meta,
 .project-stack,
 small {
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-ibm-plex-mono), monospace;
   font-size: 0.75rem;
   color: var(--foreground-muted);
 }
@@ -213,7 +226,7 @@ small {
   padding: 12px 16px;
   border-radius: 4px;
   font:
-    500 0.8125rem "IBM Plex Mono",
+    500 0.8125rem var(--font-ibm-plex-mono),
     monospace;
   text-decoration: none;
 }
@@ -355,7 +368,7 @@ small {
   text-align: right;
   color: var(--accent);
   font:
-    0.75rem "IBM Plex Mono",
+    0.75rem var(--font-ibm-plex-mono),
     monospace;
 }
 .project-card a,
@@ -385,7 +398,7 @@ small {
   padding-block: 32px 40px;
   color: var(--foreground-muted);
   font:
-    12px "IBM Plex Mono",
+    12px var(--font-ibm-plex-mono),
     monospace;
 }
 .footer-links {
@@ -400,24 +413,20 @@ small {
   font: inherit;
   cursor: pointer;
 }
-.tui-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: grid;
-  place-items: center;
-  background: #0009;
-}
 .tui-modal {
   width: min(26rem, calc(100% - 2rem));
+  margin: auto;
   border: 1px solid var(--accent);
   background: var(--background);
   box-shadow: 8px 8px 0 var(--border);
   padding: 1rem;
   color: var(--foreground);
   font:
-    13px "IBM Plex Mono",
+    13px var(--font-ibm-plex-mono),
     monospace;
+}
+.tui-modal::backdrop {
+  background: #0009;
 }
 .tui-title {
   display: flex;
@@ -451,7 +460,7 @@ small {
   background: none;
   color: inherit;
   font:
-    1.5rem/1 "IBM Plex Mono",
+    1.5rem/1 var(--font-ibm-plex-mono),
     monospace;
   cursor: pointer;
 }

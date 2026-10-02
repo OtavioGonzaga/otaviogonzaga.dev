@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { IBM_Plex_Mono, Inter } from "next/font/google";
 
 import { SkipLink } from "@/shared/ui/skip-link";
 import { getLocale } from "@/shared/i18n/get-locale";
@@ -6,6 +7,14 @@ import { dictionaries } from "@/shared/i18n/dictionaries";
 import { defaultMetadata } from "@/shared/seo/metadata";
 
 import "./globals.css";
+
+const inter = Inter({ display: "swap", subsets: ["latin"], variable: "--font-inter" });
+const ibmPlexMono = IBM_Plex_Mono({
+  display: "swap",
+  subsets: ["latin"],
+  variable: "--font-ibm-plex-mono",
+  weight: ["400", "500", "700"],
+});
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -20,7 +29,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
-      <body>
+      <body
+        className={`${inter.variable} ${ibmPlexMono.variable} bg-background text-foreground font-sans`}
+      >
         <SkipLink label={copy.skipToContent} />
         {children}
       </body>

@@ -17,10 +17,6 @@ test("serves the essential public endpoints", async ({ page, request }) => {
   await expect(
     page.locator("footer").getByRole("link", { name: "LinkedIn", exact: true }),
   ).toHaveAttribute("target", "_blank");
-  await expect(page.getByRole("link", { name: "RSS", exact: true })).toHaveAttribute(
-    "href",
-    "/rss.xml",
-  );
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(2);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
     "href",
@@ -32,10 +28,9 @@ test("serves the essential public endpoints", async ({ page, request }) => {
     expect(response.ok()).toBeTruthy();
   }
 
-  const rss = await request.get("/rss.xml");
-  expect(rss.ok()).toBeTruthy();
-  expect(rss.headers()["content-type"]).toContain("application/rss+xml");
-  await expect(rss.text()).resolves.toContain('<rss version="2.0">');
+  const sitemap = await request.get("/sitemap.xml");
+  await expect(sitemap.text()).resolves.toContain("/projects/kmux");
+  await expect(sitemap.text()).resolves.toContain("/projects/kmux-desktop");
 });
 
 test("renders project pages with canonical project navigation", async ({ page }) => {
@@ -65,6 +60,18 @@ test("persists language and theme preferences", async ({ page }) => {
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
+test("keeps focus inside the preference dialog and restores it when closed", async ({ page }) => {
+  await page.goto("/");
+  const trigger = page.getByRole("button", { name: "idioma: português" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Idioma" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Fechar" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
 });
 
 test("keeps the header usable on narrow screens and exposes the skip link", async ({ page }) => {

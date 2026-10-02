@@ -14,11 +14,11 @@ export default async function Home() {
 
   return (
     <>
-      <header className="site-header shell">
-        <a className="wordmark" href="#main-content">
+      <header className="site-header shell font-mono">
+        <a className="wordmark text-accent" href="#main-content">
           ~/otavio
         </a>
-        <nav aria-label={copy.home} className="navigation">
+        <nav aria-label={copy.home} className="navigation text-foreground-muted">
           <a href="#projects">{copy.work}</a>
           <a href="#about">{copy.aboutNav}</a>
           <a href={profile.githubUrl} rel="noreferrer" target="_blank">
@@ -33,7 +33,7 @@ export default async function Home() {
       </header>
       <main className="shell main-content" id="main-content">
         <section aria-labelledby="intro-title" className="hero">
-          <p className="eyebrow">{copy.engineeringAreas}</p>
+          <p className="eyebrow font-mono">{copy.engineeringAreas}</p>
           <h1 id="intro-title">Otavio Gonzaga</h1>
           <p className="role">{copy.role}</p>
           <p className="hero-description">{copy.heroDescription}</p>
@@ -45,10 +45,20 @@ export default async function Home() {
             NestJS&nbsp;&nbsp; PostgreSQL&nbsp;&nbsp; Docker&nbsp;&nbsp; Rust&nbsp;&nbsp; Linux
           </p>
           <div className="actions">
-            <a className="primary-action" href={profile.githubUrl} rel="noreferrer" target="_blank">
+            <a
+              className="primary-action bg-accent font-mono"
+              href={profile.githubUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
               GitHub ↗
             </a>
-            <a className="ghost-action" href={profile.linkedinUrl} rel="noreferrer" target="_blank">
+            <a
+              className="ghost-action border-border text-accent font-mono"
+              href={profile.linkedinUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
               LinkedIn ↗
             </a>
           </div>
@@ -79,7 +89,7 @@ export default async function Home() {
           </div>
           <div className="project-grid">
             {projects.map((project) => (
-              <article className="project-card" key={project.slug}>
+              <article className="project-card border-border bg-surface-raised" key={project.slug}>
                 <div className="project-meta">
                   <span>0{projects.indexOf(project) + 1}</span>
                   <span>{project.category[locale]}</span>
@@ -143,7 +153,7 @@ export default async function Home() {
           </div>
         </section>
       </main>
-      <footer className="site-footer shell">
+      <footer className="site-footer shell border-border text-foreground-muted font-mono">
         <span>© 2026 Otavio Gonzaga</span>
         <nav aria-label={copy.contact} className="footer-links">
           <a href={profile.githubUrl} rel="noreferrer" target="_blank">
@@ -153,8 +163,6 @@ export default async function Home() {
           <a href={profile.linkedinUrl} rel="noreferrer" target="_blank">
             LinkedIn
           </a>
-          <span aria-hidden="true">·</span>
-          <a href="/rss.xml">{copy.rss}</a>
         </nav>
       </footer>
       <script

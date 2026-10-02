@@ -10,7 +10,13 @@ export default defineConfig({
     setupFiles: ["./tests/setup.ts"],
     coverage: {
       provider: "v8",
-      include: ["src/modules/**/*.ts", "src/shared/config/**/*.ts", "src/shared/seo/**/*.ts"],
+      include: [
+        "src/modules/**/*.ts",
+        "src/shared/config/**/*.ts",
+        "src/shared/i18n/**/*.ts",
+        "src/shared/seo/**/*.ts",
+        "src/shared/ui/preferences-menu.tsx",
+      ],
       exclude: ["src/modules/**/ports/**/*.ts"],
       thresholds: { lines: 80, statements: 80, functions: 80, branches: 75 },
     },

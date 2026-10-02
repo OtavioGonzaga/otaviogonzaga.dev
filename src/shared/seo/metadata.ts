@@ -6,10 +6,7 @@ export const defaultMetadata: Metadata = {
   metadataBase: siteConfig.url,
   title: { default: `${siteConfig.name} — Software Engineer`, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
-  alternates: {
-    canonical: "/",
-    types: { "application/rss+xml": absoluteUrl("/rss.xml") },
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "pt_BR",
