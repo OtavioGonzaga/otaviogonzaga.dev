@@ -27,4 +27,15 @@ describe("release scripts", () => {
       }),
     ).toThrow("greater");
   });
+
+  it("rejects prerelease versions until prerelease releases are supported", () => {
+    expect(() =>
+      prepareRelease({
+        packageJson: { version: "0.1.0" },
+        changelog,
+        version: "0.2.0-alpha.1",
+        date: "2026-10-01",
+      }),
+    ).toThrow("invalid");
+  });
 });

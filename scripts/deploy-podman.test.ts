@@ -14,6 +14,7 @@ async function runDeploy(options: {
   hasOldContainer?: boolean;
   port?: string;
   promoteHealthy?: boolean;
+  rollbackHealthy?: boolean;
   runCandidateFails?: boolean;
 }) {
   const directory = await mkdtemp(path.join(tmpdir(), "deploy-podman-test-"));
@@ -36,7 +37,12 @@ fi
 if [ "$1" = exec ]; then
   case "$2" in
     app-production-candidate) [ "${options.candidateHealthy ? "1" : ""}" = 1 ] && exit 0 || exit 1 ;;
-    app-production) [ "${options.promoteHealthy ? "1" : ""}" = 1 ] && exit 0 || exit 1 ;;
+    app-production)
+      attempts=$(cat "$PODMAN_STATE" 2>/dev/null || echo 0)
+      attempts=$((attempts + 1)); echo "$attempts" > "$PODMAN_STATE"
+      if [ "$attempts" = 1 ]; then [ "${options.promoteHealthy ? "1" : ""}" = 1 ]; else [ "${options.rollbackHealthy ? "1" : ""}" = 1 ]; fi
+      exit
+      ;;
   esac
 fi
 exit 0
@@ -44,6 +50,7 @@ exit 0
   );
   await chmod(path.join(bin, "podman"), 0o755);
   const log = path.join(directory, "podman.log");
+  const state = path.join(directory, "podman.state");
   await writeFile(log, "");
   const result = spawnSync(
     "sh",
@@ -56,10 +63,15 @@ exit 0
         DEPLOY_HEALTH_INTERVAL: "0",
         PATH: `${bin}:${process.env.PATH}`,
         PODMAN_LOG: log,
+        PODMAN_STATE: state,
       },
     },
   );
-  return { exitCode: result.status, log: await readFile(log, "utf8") };
+  return {
+    exitCode: result.status,
+    log: await readFile(log, "utf8"),
+    stderr: result.stderr.toString(),
+  };
 }
 
 afterEach(async () => {
@@ -100,11 +112,23 @@ describe("deploy-podman", () => {
       candidateHealthy: true,
       hasOldContainer: true,
       promoteHealthy: false,
+      rollbackHealthy: true,
     });
     expect(result.exitCode).toBe(1);
     expect(result.log).toContain(
       "run -d --name app-production --restart unless-stopped --read-only --tmpfs /tmp:rw,noexec,nosuid,nodev --env-file",
     );
     expect(result.log).toContain("app-production:previous");
+  });
+
+  it("reports when the restored image also fails readiness", async () => {
+    const result = await runDeploy({
+      candidateHealthy: true,
+      hasOldContainer: true,
+      promoteHealthy: false,
+      rollbackHealthy: false,
+    });
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("rollback image failed readiness");
   });
 });

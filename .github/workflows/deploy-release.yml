@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.resolve.outputs.digest }}
+      release_sha: ${{ steps.resolve.outputs.release_sha }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -28,9 +29,13 @@ jobs:
           [ "$GITHUB_REF" = refs/heads/main ] || { echo 'deployment must start from main' >&2; exit 1; }
           git fetch --tags
           git show-ref --verify --quiet "refs/tags/v$VERSION" || { echo 'release tag not found' >&2; exit 1; }
+          [ "$(git cat-file -t "refs/tags/v$VERSION")" = tag ] || { echo 'release tag must be annotated' >&2; exit 1; }
+          release_sha=$(git rev-parse "v$VERSION^{}")
+          git merge-base --is-ancestor "$release_sha" origin/main || { echo 'release tag must point to main history' >&2; exit 1; }
           image="ghcr.io/${GITHUB_REPOSITORY,,}:v$VERSION"
           digest=$(docker buildx imagetools inspect "$image" --format '{{json .Manifest.Digest}}' | tr -d '"')
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
+          echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
   deploy:
     needs: resolve
     uses: ./.github/workflows/deploy-image.yml
@@ -38,3 +43,4 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       image_digest: ${{ needs.resolve.outputs.digest }}
+      expected_source_sha: ${{ needs.resolve.outputs.release_sha }}

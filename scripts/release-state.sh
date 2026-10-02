@@ -3,7 +3,7 @@ set -euo pipefail
 
 version=${1:?usage: scripts/release-state.sh VERSION}
 tag="v$version"
-semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-([0-9A-Za-z-]+\.)*[0-9A-Za-z-]+)?$'
+semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'
 
 [[ "$version" =~ $semver ]] || { echo 'invalid SemVer version' >&2; exit 64; }
 

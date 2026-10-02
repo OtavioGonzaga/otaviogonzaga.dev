@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - Production fonts, project sitemap entries, semantic Tailwind tokens, and accessible native preference dialogs.
-- GitHub API request timeout and deployment rollback coverage.
+- GitHub API request timeout, deployment rollback coverage, and release recovery state coverage.
 - Dedicated project routes, project smoke coverage, and content-backed practice areas.
 - GitHub module Ports & Adapters with unit tests and broader module coverage.
 - Project cards now keep spacing when the mobile layout switches to one column.
@@ -24,7 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
-- Release and OCI image workflows now resume safely after partial failures, and Dependabot follows Bun lockfiles.
+- Release, OCI image, and deployment workflows now verify the release commit throughout recovery and deployment.
+- Dependabot continues to update GitHub Actions; its Bun updater is temporarily disabled because it does not support Bun 1.4 lockfileVersion 2.
 - Generate Next.js declaration files before type checks instead of tracking generated `next-env.d.ts`.
 
 ### Removed

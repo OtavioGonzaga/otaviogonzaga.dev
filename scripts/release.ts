@@ -3,8 +3,7 @@ import path from "node:path";
 
 type PackageJson = Record<string, unknown> & { version: string };
 
-const semverPattern =
-  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+const semverPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 
 function compareVersions(left: string, right: string) {
   return left
@@ -25,8 +24,7 @@ export function prepareRelease(input: {
   date: string;
 }) {
   const { packageJson, changelog, version, date } = input;
-  if (!semverPattern.test(version) || version.includes("+"))
-    throw new Error(`invalid release version: ${version}`);
+  if (!semverPattern.test(version)) throw new Error(`invalid release version: ${version}`);
   if (compareVersions(version, packageJson.version) <= 0)
     throw new Error(`release version must be greater than ${packageJson.version}`);
   const heading = "## [Unreleased]";

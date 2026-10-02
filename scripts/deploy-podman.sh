@@ -45,9 +45,9 @@ if [ "${5:-}" = "--locked" ]; then
 
   restore_previous() {
     podman rm -f "$container_name" >/dev/null 2>&1 || true
-    [ -z "$old_image" ] && return 0
+    [ -z "$old_image" ] && return 1
     podman tag "$old_image" "$previous_image"
-    run_container "$container_name" "$previous_image" published
+    run_container "$container_name" "$previous_image" published && wait_for_health "$container_name"
   }
 
   if podman container exists "$container_name"; then
@@ -69,7 +69,10 @@ if [ "${5:-}" = "--locked" ]; then
   podman rm -f "$container_name" >/dev/null 2>&1 || true
   if ! run_container "$container_name" "$image" published || ! wait_for_health "$container_name"; then
     podman logs "$container_name" >&2 || true
-    restore_previous
+    restore_previous || {
+      echo 'rollback image failed readiness' >&2
+      podman logs "$container_name" >&2 || true
+    }
     exit 1
   fi
   exit 0

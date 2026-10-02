@@ -1,10 +1,7 @@
 version: 2
 updates:
-  - package-ecosystem: bun
-    directory: /
-    schedule: { interval: weekly, day: monday, time: "04:00", timezone: America/Sao_Paulo }
-    groups:
-      dependencies: { update-types: [minor, patch] }
+  # Bun 1.4 lockfileVersion 2 is not yet supported by Dependabot's Bun updater.
+  # Re-enable the Bun entry when upstream supports this lockfile format.
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly, day: tuesday, time: "04:00", timezone: America/Sao_Paulo }
