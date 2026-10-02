@@ -24,7 +24,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- The initial package version now represents the state before the first `v0.1.0` release.
 - Release, OCI image, and deployment workflows now verify the release commit throughout recovery and deployment.
+- Release recovery accepts only generated commits that modify `CHANGELOG.md` and `package.json`.
+- Deployment authenticates GHCR digest resolution and removes remote temporary deployment files automatically.
 - Dependabot continues to update GitHub Actions; its Bun updater is temporarily disabled because it does not support Bun 1.4 lockfileVersion 2.
 - Generate Next.js declaration files before type checks instead of tracking generated `next-env.d.ts`.
 

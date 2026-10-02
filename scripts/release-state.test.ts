@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -38,12 +38,20 @@ async function createRepository() {
   return worktree;
 }
 
-async function addReleaseCommit(directory: string, version = "0.1.0") {
+async function addReleaseCommit(
+  directory: string,
+  version = "0.1.0",
+  includeUnexpectedFile = false,
+) {
   await writeFile(path.join(directory, "package.json"), `{"version":"${version}"}\n`);
   await writeFile(
     path.join(directory, "CHANGELOG.md"),
     `# Changelog\n\n## [Unreleased]\n\n## [${version}] - 2026-10-02\n`,
   );
+  if (includeUnexpectedFile) {
+    await mkdir(path.join(directory, "src"));
+    await writeFile(path.join(directory, "src", "example.ts"), "export {};\n");
+  }
   git(directory, "add", ".");
   git(directory, "commit", "-m", `chore(release): v${version}`);
   git(directory, "push", "origin", "main");
@@ -88,6 +96,12 @@ describe("release-state", () => {
   it("does not accept a release-shaped commit with a different package version", async () => {
     const repository = await createRepository();
     await addReleaseCommit(repository, "0.1.1");
+    expect(runState(repository)).toContain("prepared=false");
+  });
+
+  it("does not accept a release-shaped commit with unexpected files", async () => {
+    const repository = await createRepository();
+    await addReleaseCommit(repository, "0.1.0", true);
     expect(runState(repository)).toContain("prepared=false");
   });
 

@@ -65,6 +65,6 @@ jobs:
           trap 'rm -rf "$bundle"' EXIT
           PORT="$PORT" NEXT_PUBLIC_SITE_URL="$NEXT_PUBLIC_SITE_URL" sh scripts/create-runtime-env.sh "$bundle/runtime.env"
           cp scripts/deploy-podman.sh "$bundle/"
-          tar -C "$bundle" -cf - runtime.env deploy-podman.sh | gzip -1 | ssh -i "$HOME/.ssh/deploy_key" -p "$DEPLOY_PORT" -o BatchMode=yes "$target" "remote=\$(mktemp -d); gzip -d | tar -xf - -C \$remote; chmod 700 \$remote/deploy-podman.sh; sh \$remote/deploy-podman.sh '${{ inputs.environment }}' '$app_name' '$image_ref' \$remote/runtime.env"
+          tar -C "$bundle" -cf - runtime.env deploy-podman.sh | gzip -1 | ssh -i "$HOME/.ssh/deploy_key" -p "$DEPLOY_PORT" -o BatchMode=yes "$target" "set -eu; remote=\$(mktemp -d); trap 'rm -rf \"\$remote\"' EXIT; gzip -d | tar -xf - -C \$remote; chmod 700 \$remote/deploy-podman.sh; sh \$remote/deploy-podman.sh '${{ inputs.environment }}' '$app_name' '$image_ref' \$remote/runtime.env"
           curl --fail --retry 5 --retry-delay 2 "$NEXT_PUBLIC_SITE_URL/healthz" >/dev/null
           curl --fail --retry 5 --retry-delay 2 "$NEXT_PUBLIC_SITE_URL/" >/dev/null

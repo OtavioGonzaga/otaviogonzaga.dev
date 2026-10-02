@@ -10,6 +10,8 @@ semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'
 release_commit=""
 while IFS= read -r candidate; do
   [[ "$(git log -1 --format=%s "$candidate")" == "chore(release): $tag" ]] || continue
+  changed_files=$(git diff-tree --no-commit-id --name-only -r "$candidate^!" | LC_ALL=C sort)
+  [[ "$changed_files" == $'CHANGELOG.md\npackage.json' ]] || continue
   [[ "$(git show "$candidate:package.json" | jq -r .version)" == "$version" ]] || continue
   git show "$candidate:CHANGELOG.md" | grep -Fq "## [$version]" || continue
   git merge-base --is-ancestor "$candidate" origin/main || continue
